@@ -58,12 +58,12 @@ app.post("/genero", async(req, res) => {
     }
 
     const [resultado] = BancoDeDados.execute(
-        "INSERT INTO genero(nome_genero, descricao) VALUES (?, ?, ?, ?)",
+        "INSERT INTO genero(nome_genero, descricao) VALUES (?, ?)",
         [nome_genero, descricao]
     )
 })
 
-app.get("/jogos", async (req, res) => {
+app.get("/jogos/:id", async (req, res) => {
     const [jogos] = await BancoDeDados.execute("SELECT * FROM jogos")
     return res.json(jogos)
 })
