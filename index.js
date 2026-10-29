@@ -53,7 +53,7 @@ app.get("/genero", async (req, res) => {
 app.post("/genero", async(req, res) => {
     const {nome_genero, descricao} = req.body
 
-    if(!nome || !desenvolvedora || !sinopse ||!genero_id){
+    if(!nome_genero || !descricao){
         return res.status(400).json({error: "nome_genero, descricao são obrigatorios"})
     }
 
@@ -63,6 +63,10 @@ app.post("/genero", async(req, res) => {
     )
 })
 
+app.get("/jogos", async (req, res) => {
+    const [jogos] = await BancoDeDados.execute("SELECT * FROM jogos")
+    return res.json(jogos)
+})
 app.delete("/genero/:id", async (req, res) => {
     const id = req.params.id
     const [resultado] = await BancoDeDados.execute(
