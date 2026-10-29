@@ -64,6 +64,7 @@ app.post("/genero", async(req, res) => {
 })
 
 app.get("/jogos/:id", async (req, res) => {
+    const id = req.params.id
     const [jogos] = await BancoDeDados.execute("SELECT * FROM jogos")
     return res.json(jogos)
 })
@@ -80,6 +81,25 @@ app.delete("/genero/:id", async (req, res) => {
 
     return res.status(204).end()
 
+})
+
+app.put("/jogos/:id", async(req, res) => {
+    const {nome, desenvolvedora, sinopse, genero_id} = req.body
+
+    if(!nome || !desenvolvedora || !sinopse || !genero_id){
+        return res.status(400).json({error: "Pelo amor de deus preencha todos os campos"})
+    }
+    const id = req.params.id
+    const [resultado] = await BancoDeDados.execute(
+        "UPDATE jogos SET nome = ?, desenvolvedora = ?, sinopse = ?, genero_id = ? WHERE id = ?",
+        [nome, desenvolvedora, sinopse, genero_id, id]
+    )
+
+    if (resultado.affectedRows === 0) {
+        return res.status(404).json({ error: "Jogo não encontrado" })
+    }
+
+    return res.status(200).json({ id: Number(id), nome, desenvolvedora, sinopse, genero_id })
 })
 
 app.listen(3000, () => console.log("API no ar"))
